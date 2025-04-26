@@ -1,8 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  base: "/",
-})
+// vite.config.js
+export default {
+  base: '/', // Adjust this if your project is deployed in a sub-path
+  build: {
+    rollupOptions: {
+      input: 'index.html', // Ensure Vite knows your entry file
+    }
+  }
+};
