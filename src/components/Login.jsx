@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { login as authLogin } from '../store/authSilce'
 import {Button , Input , Logo} from './index'
 import { useDispatch } from 'react-redux'
-import authService from '../appwrite/auth'
+import authService from '../appwrite/majorconfigappwrite'
+import authloginService from '../appwrite/auth'
 import { useForm } from 'react-hook-form'
 
 
 function Login() {
+    const [posts1, setPosts1] = useState([]);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {register, handleSubmit} = useForm();
@@ -17,9 +19,10 @@ function Login() {
 
     const fetchPosts = async (userId) => {
         try {
-            const posts = await appwriteService.getPostsByUser(userId);
+            const posts = await authService.getPostsByUser(userId);
              setPosts1(posts.documents); // assuming `setPosts` is from useState
-        } catch (error) {
+            console.log(posts1);
+            } catch (error) {
             console.error("Error getting user posts:", error);
         }
     };
@@ -27,9 +30,9 @@ function Login() {
     const login = async (data) => {
         setError("");
         try {
-            const session = await authService.login(data);
+            const session = await authloginService.login(data);
             if (session) {
-                const userData = await authService.getCurrentUser();
+                const userData = await authloginService.getCurrentUser();
                 console.log("Logged-in user data:", userData);
                 if (userData) {
                     dispatch(authLogin({ userData }));

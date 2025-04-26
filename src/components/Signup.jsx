@@ -2,13 +2,15 @@ import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import authService from '../appwrite/auth'
+import authService from '../appwrite/majorconfigappwrite'
+import authLoginService from '../appwrite/auth'
 import { Button, Logo , Input} from './index'
 import { useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { login } from '../store/authSilce'
 
 function Signup() {
+    const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const dispatch = useDispatch();
@@ -17,8 +19,9 @@ function Signup() {
 
     const fetchPosts = async (userId) => {
         try {
-            const posts = await appwriteService.getPostsByUser(userId);
+            const posts = await authService.getPostsByUser(userId);
             setPosts(posts.documents); // assuming `setPosts` is from useState
+            console.log(posts);
         } catch (error) {
             console.error("Error getting user posts:", error);
         }
@@ -28,9 +31,9 @@ function Signup() {
         setError("");
         console.log("data value is", data);
         try {
-            const userData = await authService.createAccount(data);
+            const userData = await authLoginService.createAccount(data);
             if (userData) {
-                const getUser = await authService.getCurrentUser();
+                const getUser = await authLoginService.getCurrentUser();
                 if (getUser) {
                     dispatch(login({getUser}));
                     await fetchPosts(getUser.$id); // Call fetchPosts with new user ID
