@@ -1,9 +1,12 @@
 // vite.config.js
-export default {
-  base: '/', // Adjust this if your project is deployed in a sub-path
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  base: '/', // Base path for production
   build: {
-    rollupOptions: {
-      input: 'index.html', // Ensure Vite knows your entry file
-    }
-  }
-};
+    outDir: 'dist', // Output directory for production build
+  },
+});
